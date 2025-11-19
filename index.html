@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Upload or YouTube Preview (Mirrored)</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    .video-list ul {
+      list-style: none;
+      padding: 0;
+    }
+    .video-list li {
+      position: relative;
+      margin: 10px 0;
+    }
+    .fa-trash {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      color: red;
+    }
+    /* Mirror effect */
+    .mirrored {
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+<body>
+<br/>
+<html><H1>Reverse is the correct for few videos....</H1></html>
+<div class="container mt-4">
+
+  <!-- Upload local video -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input type="file" class="d-none" id="addVideosInput" accept="video/*">
+      <button class="btn btn-secondary" id="addVideosBtn">
+        Upload Video <i class="fa fa-camera"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Add YouTube link -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" id="youtubeLink" class="form-control" placeholder="Paste YouTube link here">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary" id="addYoutubeBtn">Add YouTube</button>
+    </div>
+  </div>
+
+  <!-- Video preview -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="video-list">
+        <ul></ul>
+      </div>
+    </div>
+  </div>
+</div>
+<p><b>Problem Statement</b></p>
+<p>The common challenge when learning dance from YouTube or any video tutorial. “mirror problem”: when you watch someone facing you, their right side appears as your left, which makes following along confusing. Two solutions:
+
+<p>Solution 1: Laptop Facing a Mirror</p>
+<p>How it works: Place your laptop in front of a mirror and watch the video’s reflection.</p>
+
+<p>Benefit: The mirrored reflection flips the dancer’s movements, so when they raise their right hand, you also raise your right hand.</p>
+
+<p>Drawback: Requires a physical mirror setup, which isn’t always convenient.</p>
+
+<p>Solution 2: Mirrored Video</p>
+<p>How it works: Use software or browser extensions to flip the video horizontally (many video players or editing tools allow this).</p>
+
+<p>Benefit: Much more practical — you can directly watch the mirrored version without needing a mirror.</p>
+
+<p>Drawback: Not all platforms support mirroring natively, so you may need third-party tools.</p>
+
+<script>
+  // Upload local video
+  $('#addVideosBtn').click(() => $('#addVideosInput').click());
+
+  document.getElementById('addVideosInput').onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+
+    const li = `
+      <li>
+        <video class="mirrored" controls src="${url}" width="1000" height="500"></video>
+        <span><i class="fa fa-trash"></i></span>
+      </li>
+    `;
+    $('.video-list ul').html(li); // replace previous
+    e.target.value = ""; // reset input
+  };
+
+  // Add YouTube link
+  $('#addYoutubeBtn').click(() => {
+    const link = $('#youtubeLink').val().trim();
+    if (!link) return;
+
+    // Extract video ID from YouTube URL
+    const match = link.match(/(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/);
+    if (!match) {
+      alert("Invalid YouTube link");
+      return;
+    }
+    const videoId = match[1];
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+    const li = `
+      <li>
+        <iframe class="mirrored" width="560" height="315"
+                src="${embedUrl}"
+                frameborder="0" allowfullscreen>
+        </iframe>
+        <span><i class="fa fa-trash"></i></span>
+      </li>
+    `;
+    $('.video-list ul').html(li); // replace previous
+    $('#youtubeLink').val(""); // clear input
+  });
+
+  // Delete functionality
+  $(document).on('click', '.fa-trash', function() {
+    $(this).closest('li').remove();
+  });
+</script>
+</body>
+</html>
