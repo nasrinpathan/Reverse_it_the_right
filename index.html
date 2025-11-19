@@ -32,7 +32,7 @@
 </head>
 <body>
 <br/>
-<html><H1>Reverse is the correct for few videos....</H1></html>
+<H1>Reverse is the correct for few videos....</H1>
 <div class="container mt-4">
 
   <!-- Upload local video -->
@@ -65,20 +65,16 @@
   </div>
 </div>
 <p><b>Problem Statement</b></p>
-<p>The common challenge when learning dance from YouTube or any video tutorial. “mirror problem”: when you watch someone facing you, their right side appears as your left, which makes following along confusing. Two solutions:
+<p>The common challenge when learning dance from YouTube or any video tutorial. “mirror problem”: when you watch someone facing you, their right side appears as your left, which makes following along confusing. Two solutions:</p>
 
 <p>Solution 1: Laptop Facing a Mirror</p>
 <p>How it works: Place your laptop in front of a mirror and watch the video’s reflection.</p>
-
 <p>Benefit: The mirrored reflection flips the dancer’s movements, so when they raise their right hand, you also raise your right hand.</p>
-
 <p>Drawback: Requires a physical mirror setup, which isn’t always convenient.</p>
 
 <p>Solution 2: Mirrored Video</p>
 <p>How it works: Use software or browser extensions to flip the video horizontally (many video players or editing tools allow this).</p>
-
 <p>Benefit: Much more practical — you can directly watch the mirrored version without needing a mirror.</p>
-
 <p>Drawback: Not all platforms support mirroring natively, so you may need third-party tools.</p>
 
 <script>
@@ -106,13 +102,22 @@
     const link = $('#youtubeLink').val().trim();
     if (!link) return;
 
-    // Extract video ID from YouTube URL
-    const match = link.match(/(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/);
-    if (!match) {
+    let videoId = "";
+    // Try to match standard YouTube URLs
+    let match = link.match(/(?:youtube\.com.*?[?&]v=|youtu\.be\/)([^&\s]+)/);
+    if (match) {
+      videoId = match[1];
+    } else {
+      // Try embedding/shorts path
+      match = link.match(/youtube\.com\/(?:embed|shorts)\/([^\?&\/\s]+)/);
+      if (match) {
+        videoId = match[1];
+      }
+    }
+    if (!videoId) {
       alert("Invalid YouTube link");
       return;
     }
-    const videoId = match[1];
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
 
     const li = `
